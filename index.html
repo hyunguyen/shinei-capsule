@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ShinEi’s Capsule</title>
+  <meta name="description" content="ShinEi’s crown cap collection">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav__inner">
+      <a class="nav__logo" href="./" aria-label="Home"><img src="assets/logo.png" alt="ShinEi" width="72" height="72"></a>
+      <nav class="nav__links" aria-label="Main">
+        <a class="nav-item" id="nav-story" href="#">My story</a>
+        <a class="nav-item" id="nav-contact" href="#contact">Contact</a>
+      </nav>
+      <button class="btn-icon nav__menu" id="menu-open" type="button" aria-label="Open menu" aria-haspopup="dialog">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20 17C20.5523 17 21 17.4477 21 18C21 18.5523 20.5523 19 20 19H4C3.44772 19 3 18.5523 3 18C3 17.4477 3.44772 17 4 17H20ZM20 11C20.5523 11 21 11.4477 21 12C21 12.5523 20.5523 13 20 13H4C3.44772 13 3 12.5523 3 12C3 11.4477 3.44772 11 4 11H20ZM20 5C20.5523 5 21 5.44772 21 6C21 6.55228 20.5523 7 20 7H4C3.44772 7 3 6.55228 3 6C3 5.44772 3.44772 5 4 5H20Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap hero__inner">
+        <h1 class="hero__title">ShinEi’s Capsule</h1>
+        <div class="stats-wrap">
+          <div class="stats">
+            <div class="stat"><div class="stat__num" id="stat-days">–</div><div class="stat__label">Days collecting</div></div>
+            <div class="stat"><div class="stat__num" id="stat-caps">–</div><div class="stat__label">Crown caps</div></div>
+            <div class="stat"><div class="stat__num" id="stat-countries">–</div><div class="stat__label">Countries</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="listing">
+      <div class="wrap listing__inner">
+        <div class="searchbar">
+          <div class="searchbar__row">
+            <label class="field" id="search-field">
+              <svg class="field__icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-search"/></svg>
+              <input id="q" type="search" placeholder="Search by brand, country, product type, illustration, color" autocomplete="off" aria-label="Search caps">
+              <button class="field__clear" id="q-clear" type="button" aria-label="Clear search" hidden>
+                <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-x"/></svg>
+              </button>
+            </label>
+            <button class="chip-btn" id="filter-open" type="button" aria-label="Filter" aria-haspopup="dialog">
+              <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-sliders"/></svg>
+            </button>
+          </div>
+          <div class="applied" id="applied" hidden></div>
+        </div>
+
+        <div class="results" id="results" aria-live="polite"></div>
+        <button class="btn-secondary" id="more" type="button" hidden>Show more</button>
+        <p class="end-note" id="end-note" hidden>End of list.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="wrap footer__inner">
+      <div class="footer__brand">
+        <img src="assets/logo.png" alt="" width="52" height="52">
+        <span id="footer-text">ShinEi’s Capsule | 2026</span>
+      </div>
+      <div class="footer__links">
+        <a id="c-email" href="#">email</a>
+        <a id="c-linkedin" href="#" target="_blank" rel="noopener">LinkedIn</a>
+        <a id="c-behance" href="#" target="_blank" rel="noopener">Behance</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Filter sheet -->
+  <div class="overlay" id="filter" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="filter-title">
+      <div class="sheet__header">
+        <span class="sheet__spacer"></span>
+        <h2 class="sheet__title" id="filter-title">Filter</h2>
+        <button class="btn-ghost-icon" type="button" data-close aria-label="Close">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+      </div>
+      <div class="sheet__body" id="filter-body"></div>
+      <div class="sheet__footer">
+        <button class="btn-reset" id="filter-reset" type="button" aria-label="Reset filter">
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-rotate"/></svg>
+        </button>
+        <button class="btn-primary" id="filter-apply" type="button">View result</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cap detail -->
+  <div class="overlay overlay--center" id="detail" hidden>
+    <div class="detail" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <div class="detail__card" id="detail-card"></div>
+    </div>
+    <button class="btn-close-lg" type="button" data-close aria-label="Close">
+      <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-x"/></svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div class="overlay overlay--bottom" id="menu" hidden>
+    <div class="menu" role="dialog" aria-modal="true" aria-label="Menu">
+      <nav class="menu__list">
+        <a class="nav-item is-active" href="./">Home</a>
+        <a class="nav-item" id="menu-story" href="#">My story</a>
+        <a class="nav-item" id="menu-contact" href="#contact">Contact</a>
+      </nav>
+      <button class="menu__close" type="button" data-close>Close</button>
+    </div>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-search" viewBox="0 0 24 24"><path fill="currentColor" d="M11 2C15.9706 2 20 6.02944 20 11C20 13.125 19.2619 15.0766 18.0303 16.6162L21.707 20.293C22.0976 20.6835 22.0976 21.3165 21.707 21.707C21.3165 22.0974 20.6835 22.0975 20.293 21.707L16.6162 18.0303C15.0766 19.2619 13.125 20 11 20C6.02944 20 2 15.9706 2 11C2 6.02944 6.02944 2 11 2ZM11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C14.866 18 18 14.866 18 11C18 7.13401 14.866 4 11 4Z"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path fill="currentColor" d="M16 17C16.5523 17 17 17.4477 17 18V19H21C21.5523 19 22 19.4477 22 20C22 20.5523 21.5523 21 21 21H17V22C17 22.5523 16.5523 23 16 23C15.4477 23 15 22.5523 15 22V18C15 17.4477 15.4477 17 16 17ZM12 19C12.5523 19 13 19.4477 13 20C13 20.5523 12.5523 21 12 21H3C2.44772 21 2 20.5523 2 20C2 19.4477 2.44772 19 3 19H12ZM8 9C8.55228 9 9 9.44772 9 10V14C9 14.5523 8.55228 15 8 15C7.44772 15 7 14.5523 7 14V13H3C2.44772 13 2 12.5523 2 12C2 11.4477 2.44772 11 3 11H7V10C7 9.44772 7.44772 9 8 9ZM21 11C21.5523 11 22 11.4477 22 12C22 12.5523 21.5523 13 21 13H12C11.4477 13 11 12.5523 11 12C11 11.4477 11.4477 11 12 11H21ZM14 1C14.5523 1 15 1.44772 15 2V3H21C21.5523 3 22 3.44772 22 4C22 4.55228 21.5523 5 21 5H15V6C15 6.55228 14.5523 7 14 7C13.4477 7 13 6.55228 13 6V2C13 1.44772 13.4477 1 14 1ZM10 3C10.5523 3 11 3.44772 11 4C11 4.55228 10.5523 5 10 5H3C2.44772 5 2 4.55228 2 4C2 3.44772 2.44772 3 3 3H10Z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path fill="currentColor" d="M17.2929 5.29297C17.6834 4.90245 18.3164 4.90245 18.707 5.29297C19.0974 5.6835 19.0975 6.31653 18.707 6.70703L13.414 12L18.707 17.293C19.0974 17.6835 19.0975 18.3165 18.707 18.707C18.3165 19.0975 17.6834 19.0975 17.2929 18.707L11.9999 13.4141L6.70696 18.707C6.31646 19.0975 5.68342 19.0975 5.29289 18.707C4.90237 18.3165 4.90237 17.6835 5.29289 17.293L10.5859 12L5.29289 6.70703C4.90237 6.31651 4.90237 5.68349 5.29289 5.29297C5.68342 4.90245 6.31643 4.90245 6.70696 5.29297L11.9999 10.5859L17.2929 5.29297Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path fill="currentColor" d="M19.2929 5.29289C19.6834 4.90237 20.3164 4.90237 20.707 5.29289C21.0974 5.68342 21.0975 6.31646 20.707 6.70696L9.70696 17.707C9.31646 18.0975 8.68342 18.0974 8.29289 17.707L3.29289 12.707C2.90237 12.3164 2.90237 11.6834 3.29289 11.2929C3.68342 10.9024 4.31643 10.9024 4.70696 11.2929L8.99992 15.5859L19.2929 5.29289Z"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path fill="currentColor" d="M17.2929 8.29289C17.6834 7.90237 18.3164 7.90237 18.707 8.29289C19.0974 8.68342 19.0975 9.31646 18.707 9.70696L12.707 15.707C12.3165 16.0975 11.6834 16.0974 11.2929 15.707L5.29289 9.70696C4.90237 9.31643 4.90237 8.68342 5.29289 8.29289C5.68342 7.90237 6.31643 7.90237 6.70696 8.29289L11.9999 13.5859L17.2929 8.29289Z"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path fill="currentColor" d="M21 2C21.5522 2.00003 22 2.44773 22 3V8C22 8.2652 21.8945 8.5195 21.707 8.70703C21.5195 8.89455 21.2651 8.99999 21 9H15.9999C15.4477 9 14.9999 8.55228 14.9999 8C14.9999 7.44772 15.4477 7 15.9999 7H18.5859L18.0468 6.46094L17.7353 6.1748C16.147 4.78617 14.1132 4.00001 11.9999 4C10.4177 4 8.8712 4.4696 7.55561 5.34863C6.2401 6.22764 5.21483 7.47677 4.60932 8.93848C4.00386 10.4002 3.84465 12.0088 4.15327 13.5605C4.46195 15.1124 5.22391 16.5384 6.34272 17.6572C7.46154 18.776 8.88757 19.538 10.4394 19.8467C11.9912 20.1553 13.5998 19.9961 15.0615 19.3906C16.5232 18.7851 17.7723 17.7598 18.6513 16.4443C19.5304 15.1287 20 13.5822 20 12C20 11.4477 20.4477 11 21 11C21.5522 11 22 11.4477 22 12C22 13.9778 21.4132 15.9112 20.3144 17.5557C19.2156 19.2001 17.6543 20.4824 15.8271 21.2393C13.9999 21.9961 11.9886 22.1935 10.0488 21.8076C8.1091 21.4217 6.32711 20.4697 4.92866 19.0713C3.53021 17.6728 2.57822 15.8909 2.19233 13.9512C1.80648 12.0114 2.00382 10.0001 2.76069 8.17285C3.51756 6.34567 4.79987 4.78433 6.44429 3.68555C8.08877 2.58675 10.0222 2 11.9999 2C14.7857 2.00001 17.4417 3.10566 19.4326 5.01953C19.4373 5.02408 19.4426 5.02857 19.4472 5.0332L20 5.58594V3C20 2.44772 20.4477 2 21 2Z"/></symbol>
+  </svg>
+
+  <script src="config.js"></script>
+  <script src="data/snapshot.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
