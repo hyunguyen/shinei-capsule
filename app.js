@@ -96,7 +96,7 @@
     for (const [key, name] of Object.entries(COL)) idx[key] = header.indexOf(name);
     const get = (r, key) => (idx[key] >= 0 ? String(r[idx[key]] ?? "").trim() : "");
 
-    return rows.slice(headerIdx + 1)
+    const caps = rows.slice(headerIdx + 1)
       .map((r) => {
         const cap = {};
         for (const key of Object.keys(COL)) cap[key] = get(r, key);
@@ -107,8 +107,20 @@
         ...c,
         image: imageUrl(c.image),
         _search: fold([c.id, c.product, c.brand, c.country, c.visual, c.text, c.note].join(" ")),
-      }))
-      .sort((a, b) => (parseFloat(a.id) || 0) - (parseFloat(b.id) || 0));
+      }));
+    return CFG.order === "id"
+      ? caps.sort((a, b) => (parseFloat(a.id) || 0) - (parseFloat(b.id) || 0))
+      : shuffle(caps);
+  }
+
+  // Fisher–Yates; runs once per page load, so "Show more", search and filters
+  // all page through the same shuffled order.
+  function shuffle(list) {
+    for (let i = list.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [list[i], list[j]] = [list[j], list[i]];
+    }
+    return list;
   }
 
   function rowsToCountryCodes(rows) {

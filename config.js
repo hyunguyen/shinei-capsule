@@ -23,6 +23,9 @@ window.CONFIG = {
   // Ngày bắt đầu sưu tầm — dùng để tính "Days collecting"
   collectingSince: "2016-10-20",
 
+  // Thứ tự hiển thị: "random" = trộn ngẫu nhiên mỗi lần tải trang, "id" = theo cột ID
+  order: "random",
+
   // Số nắp hiển thị mỗi lần, trước khi bấm "Show more"
   pageSize: 24,
 

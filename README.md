@@ -51,7 +51,7 @@ Nắp nào chưa có ảnh (hoặc link lỗi) sẽ tự hiện ảnh placeholde
 
 ## Hành vi theo spec Figma
 
-- Sắp xếp mặc định theo ID.
+- Thứ tự mặc định: trộn ngẫu nhiên mỗi lần tải trang (đổi `order: "id"` trong `config.js` để xếp theo ID). Trong một lần xem, "Show more", tìm kiếm và bộ lọc đều giữ cùng một thứ tự đã trộn.
 - Tìm kiếm trên brand, country, product type, visual tag (hình minh hoạ, màu), text on the cap, note, ID. Gõ không dấu vẫn ra ("danh thanh" → "Đảnh Thạnh").
 - Bộ lọc: mỗi loại chọn 1 giá trị, bấm lại để bỏ chọn. Tuỳ chọn xếp theo số nắp nhiều nhất rồi theo ABC. Product type hiện tối đa 12 chip; Brand/Country hiện tối đa 7, nếu nhiều hơn thì hiện 5 kèm "View more"/"View less".
 - Nút "View result" hiện số kết quả trước khi áp dụng; "No result" nếu không có nắp nào.
