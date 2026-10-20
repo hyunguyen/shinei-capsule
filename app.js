@@ -283,6 +283,21 @@
   const CLOSE_MS = 220;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let lastFocus = null;
+
+  // Locking scroll removes a classic scrollbar; pad the body by its width so
+  // the page behind the overlay doesn't jump sideways.
+  function lockScroll() {
+    if (document.body.classList.contains("is-locked")) return;
+    const gap = window.innerWidth - document.documentElement.clientWidth;
+    if (gap > 0) document.body.style.paddingRight = gap + "px";
+    document.body.classList.add("is-locked");
+  }
+  function unlockScroll() {
+    if (document.querySelector(".overlay.is-open")) return;
+    document.body.classList.remove("is-locked");
+    document.body.style.paddingRight = "";
+  }
+
   function openModal(id) {
     lastFocus = document.activeElement;
     const m = $("#" + id);
@@ -290,7 +305,7 @@
     m.classList.remove("is-closing");
     m.hidden = false;
     m.classList.add("is-open");
-    document.body.classList.add("is-locked");
+    lockScroll();
     const focusable = m.querySelector("[data-close], button, input");
     focusable && focusable.focus({ preventScroll: true });
   }
@@ -299,8 +314,11 @@
     if (!m.classList.contains("is-open")) return;
     m.classList.remove("is-open");
     m.classList.add("is-closing");
-    m._hideTimer = setTimeout(() => { m.hidden = true; m.classList.remove("is-closing"); }, reducedMotion.matches ? 0 : CLOSE_MS);
-    if (!document.querySelector(".overlay.is-open")) document.body.classList.remove("is-locked");
+    m._hideTimer = setTimeout(() => {
+      m.hidden = true;
+      m.classList.remove("is-closing");
+      unlockScroll();  // after the exit, so the scrollbar doesn't pop back mid-animation
+    }, reducedMotion.matches ? 0 : CLOSE_MS);
     lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
   }
   document.querySelectorAll(".overlay").forEach((ov) => {

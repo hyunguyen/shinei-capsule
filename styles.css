@@ -23,6 +23,23 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
+
+/* Slim, quiet scrollbars for classic (always-visible) scrollbars, e.g. macOS
+   with a mouse plugged in, or Windows. Overlay scrollbars are unaffected. */
+html, .sheet__body, .detail {
+  scrollbar-width: thin;
+  scrollbar-color: var(--outline) transparent;
+}
+/* Safari and older Chromium use the -webkit- pseudo-elements instead. */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background-color: var(--outline);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover { background-color: var(--on-surface-variant); }
 body {
   margin: 0;
   background: var(--surface);
