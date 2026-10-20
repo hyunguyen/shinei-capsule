@@ -278,8 +278,8 @@
   // ------------------------------------------------------------------
   // Modals
   // ------------------------------------------------------------------
-  // Overlays animate in via the .is-open class and stay rendered until the
-  // exit transition has finished; keep CLOSE_MS in sync with styles.css.
+  // Overlays animate in via .is-open and out via .is-closing, staying rendered
+  // until the exit animation has finished; keep CLOSE_MS in sync with styles.css.
   const CLOSE_MS = 220;
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let lastFocus = null;
@@ -287,8 +287,8 @@
     lastFocus = document.activeElement;
     const m = $("#" + id);
     clearTimeout(m._hideTimer);
+    m.classList.remove("is-closing");
     m.hidden = false;
-    void m.offsetWidth;  // commit the closed state so the transition runs
     m.classList.add("is-open");
     document.body.classList.add("is-locked");
     const focusable = m.querySelector("[data-close], button, input");
@@ -298,7 +298,8 @@
     const m = $("#" + id);
     if (!m.classList.contains("is-open")) return;
     m.classList.remove("is-open");
-    m._hideTimer = setTimeout(() => { m.hidden = true; }, reducedMotion.matches ? 0 : CLOSE_MS);
+    m.classList.add("is-closing");
+    m._hideTimer = setTimeout(() => { m.hidden = true; m.classList.remove("is-closing"); }, reducedMotion.matches ? 0 : CLOSE_MS);
     if (!document.querySelector(".overlay.is-open")) document.body.classList.remove("is-locked");
     lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
   }

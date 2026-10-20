@@ -56,3 +56,7 @@ Nắp nào chưa có ảnh (hoặc link lỗi) sẽ tự hiện ảnh placeholde
 - Bộ lọc: mỗi loại chọn 1 giá trị, bấm lại để bỏ chọn. Tuỳ chọn xếp theo số nắp nhiều nhất rồi theo ABC. Product type hiện tối đa 12 chip; Brand/Country hiện tối đa 7, nếu nhiều hơn thì hiện 5 kèm "View more"/"View less".
 - Nút "View result" hiện số kết quả trước khi áp dụng; "No result" nếu không có nắp nào.
 - Bộ lọc và từ khoá được giữ trên URL, nên có thể gửi link một danh sách đã lọc cho bạn bè.
+
+## Khi sửa `styles.css`, `app.js` hoặc `config.js`
+
+Trong `index.html`, các file này được gắn số phiên bản (`styles.css?v=…`) để trình duyệt tải bản mới thay vì dùng bản cũ trong cache. Mỗi lần sửa, đổi giá trị `v` (ví dụ thêm một chữ cái hoặc đổi ngày).

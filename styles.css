@@ -655,44 +655,72 @@ a { color: inherit; }
 
 /* =====================================================================
    Modal motion
-   Closed state is the default; .is-open (set by app.js) animates in, and
-   removing it plays the exit before the overlay is hidden (220ms, matches
-   CLOSE_MS in app.js).
+   Closed state is the default. Adding .is-open (app.js) plays a keyframe
+   entrance with a visible double bounce; closing swaps it for .is-closing,
+   which plays the exit before the overlay is hidden (220ms = CLOSE_MS in app.js).
    ===================================================================== */
-:root {
-  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);    /* scale-in with a little overshoot */
-  --ease-slide: cubic-bezier(0.32, 1.25, 0.6, 1);   /* slide-up with a softer overshoot */
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+:root { --ease-exit: cubic-bezier(0.4, 0, 1, 1); }
+
+@keyframes modal-pop {
+  0%   { opacity: 0; transform: scale(0.7); }
+  40%  { opacity: 1; transform: scale(1.06); }
+  65%  { transform: scale(0.98); }
+  85%  { transform: scale(1.01); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes modal-out {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.8); }
+}
+@keyframes sheet-down {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
+@keyframes menu-down {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(100% + 16px)); }
+}
+@keyframes sheet-up {
+  0%   { transform: translateY(100%); }
+  55%  { transform: translateY(-4%); }
+  78%  { transform: translateY(1.2%); }
+  100% { transform: translateY(0); }
+}
+@keyframes menu-up {
+  0%   { transform: translateY(calc(100% + 16px)); }
+  55%  { transform: translateY(-14px); }
+  78%  { transform: translateY(4px); }
+  100% { transform: translateY(0); }
 }
 
-.overlay { background: transparent; transition: background-color 0.22s ease; }
+.overlay { background: transparent; transition: background-color 0.3s ease; }
 .overlay.is-open { background: var(--surface-overlay); }
 
-/* Desktop & tablet filter sheet, and cap detail on every size: scale 0.7 → 1, fade 0 → 1. */
+/* Filter sheet (desktop & tablet) and cap detail (every size): scale 0.7 → 1 with a bounce, fade 0 → 100%. */
 .sheet,
 .detail,
 #detail .btn-close-lg {
   opacity: 0;
   transform: scale(0.7);
-  transition: transform 0.22s var(--ease-exit), opacity 0.18s var(--ease-exit);
 }
+.is-closing .sheet,
+.is-closing .detail,
+#detail.is-closing .btn-close-lg { animation: modal-out 0.22s var(--ease-exit) both; }
 .is-open .sheet,
 .is-open .detail,
 #detail.is-open .btn-close-lg {
   opacity: 1;
   transform: none;
-  transition: transform 0.42s var(--ease-pop), opacity 0.2s ease-out;
+  animation: modal-pop 0.55s ease-out both;
 }
-#detail.is-open .btn-close-lg { transition-delay: 0.06s; }
+#detail.is-open .btn-close-lg { animation-delay: 0.08s; }
 
-/* Navigation menu (mobile): slide up from below the screen. */
-.menu {
-  transform: translateY(calc(100% + 16px));
-  transition: transform 0.22s var(--ease-exit);
-}
+/* Navigation menu: slide up from below the screen with a bounce. */
+.menu { transform: translateY(calc(100% + 16px)); }
+#menu.is-closing .menu { animation: menu-down 0.22s var(--ease-exit) both; }
 #menu.is-open .menu {
   transform: none;
-  transition: transform 0.45s var(--ease-slide);
+  animation: menu-up 0.6s cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 
 @media (max-width: 767px) {
@@ -701,20 +729,23 @@ a { color: inherit; }
   #filter .sheet {
     opacity: 1;
     transform: translateY(100%);
-    box-shadow: 0 48px 0 0 var(--surface);
-    transition: transform 0.22s var(--ease-exit);
+    box-shadow: 0 64px 0 0 var(--surface);
   }
+  #filter.is-closing .sheet { animation: sheet-down 0.22s var(--ease-exit) both; }
   #filter.is-open .sheet {
     transform: none;
-    transition: transform 0.45s var(--ease-slide);
+    animation: sheet-up 0.6s cubic-bezier(0.2, 0.8, 0.3, 1) both;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sheet, .detail, #detail .btn-close-lg, .menu,
   #filter .sheet, #filter.is-open .sheet, #menu.is-open .menu,
-  .is-open .sheet, .is-open .detail, #detail.is-open .btn-close-lg {
+  .is-open .sheet, .is-open .detail, #detail.is-open .btn-close-lg,
+  .is-closing .sheet, .is-closing .detail, #detail.is-closing .btn-close-lg,
+  #filter.is-closing .sheet, #menu.is-closing .menu {
     transform: none;
+    animation: none;
     transition: opacity 0.15s linear;
   }
 }
