@@ -638,9 +638,9 @@ a { color: inherit; }
   .overlay#filter { justify-content: flex-end; padding: 16px 0 0; }
   .sheet { max-width: none; border-radius: 24px 24px 0 0; }
 
-  .detail { padding: 16px; }
+  .overlay--center { padding: 24px 16px; }
+  .detail { padding: 12px; }
   .dtable__body { flex-direction: column; }
-  .dtable__img { width: 100%; border-bottom: 1px solid var(--on-surface); }
+  .dtable__img { width: 100%; padding: 16px 40px; border-bottom: 1px solid var(--on-surface); }
   .dtable__rows { border-left: 0; }
-  .drow { gap: 16px; }
 }
