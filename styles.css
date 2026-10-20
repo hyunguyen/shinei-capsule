@@ -500,7 +500,7 @@ a { color: inherit; }
   height: 24px;
   border: 1px solid var(--outline);
   border-radius: 100px;
-  background: var(--surface-variant);
+  background: var(--surface);
 }
 .radio::before {
   content: "";
@@ -512,8 +512,8 @@ a { color: inherit; }
 }
 @media (hover: hover) { .opt:hover .radio::before { opacity: var(--state-1); } }
 .opt:active .radio::before { opacity: var(--state-2); }
-.opt[aria-checked="true"] .radio { background: var(--surface); border-color: var(--primary); }
-.opt[aria-checked="true"] .radio::before { background: var(--primary); }
+.opt[aria-checked="true"] .radio { border-color: var(--on-surface); }
+.opt[aria-checked="true"] .radio::before { background: var(--on-surface); }
 .opt[aria-checked="true"] .radio::after {
   content: "";
   position: absolute;
@@ -522,7 +522,7 @@ a { color: inherit; }
   width: 14px;
   height: 14px;
   border-radius: 20px;
-  background: var(--primary);
+  background: var(--on-surface);
   transform: translate(-50%, -50%);
 }
 
