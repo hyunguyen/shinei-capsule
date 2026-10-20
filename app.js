@@ -481,6 +481,9 @@
   // ------------------------------------------------------------------
   // Boot
   // ------------------------------------------------------------------
+  // iOS Safari only applies :active while touching if a touch listener exists.
+  document.addEventListener("touchstart", () => {}, { passive: true });
+
   readURL();
   qInput.value = state.q;
   qClear.hidden = !state.q;

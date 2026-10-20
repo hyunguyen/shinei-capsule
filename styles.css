@@ -81,7 +81,7 @@ a { color: inherit; }
   opacity: 0;
   pointer-events: none;
 }
-.nav-item:hover::before { opacity: 0.08; }
+@media (hover: hover) { .nav-item:hover::before { opacity: 0.08; } }
 .nav-item:active::before { opacity: 0.16; }
 /* ShinEi cap peeking out of the bottom-right corner: shown on hover, press and active.
    Tilted up 15° at rest/hover and flips to the other side on press (Figma ±15°;
@@ -99,9 +99,9 @@ a { color: inherit; }
   transition: opacity 0.15s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: none;
 }
-.nav-item:hover::after,
 .nav-item:focus-visible::after,
 .nav-item.is-active::after { opacity: 1; transform: rotate(-15deg); }
+@media (hover: hover) { .nav-item:hover::after { opacity: 1; transform: rotate(-15deg); } }
 .nav-item:active::after { opacity: 1; transform: rotate(15deg); }
 @media (prefers-reduced-motion: reduce) {
   .nav-item::after { transition: none; }
@@ -122,10 +122,10 @@ a { color: inherit; }
   border-radius: 12px;
   color: var(--on-surface);
 }
-.btn-icon:hover, .chip-btn:hover { background: var(--surface-variant); }
+@media (hover: hover) { .btn-icon:hover, .chip-btn:hover { background: var(--surface-variant); } }
 .btn-icon:active, .chip-btn:active { background: var(--outline-variant); }
 .chip-btn.is-active { background: var(--surface-variant); border-color: var(--on-surface); }
-.chip-btn.is-active:hover { background: var(--outline-variant); }
+@media (hover: hover) { .chip-btn.is-active:hover { background: var(--outline-variant); } }
 .chip-btn.is-active:active { background: var(--outline); }
 
 .btn-secondary {
@@ -136,7 +136,7 @@ a { color: inherit; }
   border-radius: 12px;
   font-weight: 600;
 }
-.btn-secondary:hover { background: var(--surface-variant); }
+@media (hover: hover) { .btn-secondary:hover { background: var(--surface-variant); } }
 .btn-secondary:active { background: var(--outline-variant); }
 
 .btn-primary {
@@ -149,7 +149,7 @@ a { color: inherit; }
   color: var(--on-primary);
   font-weight: 600;
 }
-.btn-primary:hover { background: #5a6fc0; }
+@media (hover: hover) { .btn-primary:hover { background: #5a6fc0; } }
 .btn-primary:active { background: #7383c8; }
 .btn-primary:disabled { cursor: default; background: var(--primary); }
 
@@ -166,7 +166,7 @@ a { color: inherit; }
   background: var(--surface);
   color: var(--primary);
 }
-.btn-reset:hover { background: rgba(61, 86, 180, var(--state-1)); }
+@media (hover: hover) { .btn-reset:hover { background: rgba(61, 86, 180, var(--state-1)); } }
 .btn-reset:active { background: rgba(61, 86, 180, var(--state-2)); }
 
 .btn-ghost-icon {
@@ -181,7 +181,7 @@ a { color: inherit; }
   background: transparent;
   color: var(--on-surface);
 }
-.btn-ghost-icon:hover { background: var(--surface-variant); }
+@media (hover: hover) { .btn-ghost-icon:hover { background: var(--surface-variant); } }
 
 /* ---------- Hero ---------- */
 .hero { padding: 24px 0; }
@@ -229,7 +229,7 @@ a { color: inherit; }
   border-radius: 12px;
   cursor: text;
 }
-.field:hover { background: var(--surface-variant); }
+@media (hover: hover) { .field:hover { background: var(--surface-variant); } }
 .field:focus-within { background: var(--surface); border-color: var(--on-surface); }
 .field__icon { flex: none; color: var(--on-surface-variant); }
 .field input {
@@ -267,7 +267,7 @@ a { color: inherit; }
   font-weight: 500;
 }
 .input-chip span { padding: 0 4px; }
-.input-chip:hover { background: var(--outline-variant); }
+@media (hover: hover) { .input-chip:hover { background: var(--outline-variant); } }
 
 /* ---------- Results grid ---------- */
 .results {
@@ -322,12 +322,14 @@ a { color: inherit; }
   transform: translateY(calc(100% - 35px));
   transition: transform 0.25s ease;
 }
-.cap:hover .cap__info,
 .cap:focus-visible .cap__info,
 .cap:active .cap__info { transform: none; }
-.cap:hover .cap__img img,
 .cap:focus-visible .cap__img img,
 .cap:active .cap__img img { transform: translateY(-14%) scale(1.15); }
+@media (hover: hover) {
+  .cap:hover .cap__info { transform: none; }
+  .cap:hover .cap__img img { transform: translateY(-14%) scale(1.15); }
+}
 .cap:focus-visible { outline-offset: -2px; }
 
 .tag-head { display: flex; align-items: flex-end; position: relative; z-index: 1; margin-bottom: -1px; }
@@ -463,10 +465,10 @@ a { color: inherit; }
   font-weight: 500;
 }
 .chip span { padding: 0 4px; }
-.chip:hover { background: var(--surface-variant); }
+@media (hover: hover) { .chip:hover { background: var(--surface-variant); } }
 .chip:active { background: var(--outline-variant); }
 .chip[aria-pressed="true"] { background: var(--surface-variant); border-color: var(--on-surface); }
-.chip[aria-pressed="true"]:hover { background: var(--outline-variant); }
+@media (hover: hover) { .chip[aria-pressed="true"]:hover { background: var(--outline-variant); } }
 .chip[aria-pressed="true"]:active { background: var(--outline); }
 
 .opts { display: flex; flex-direction: column; }
@@ -508,7 +510,7 @@ a { color: inherit; }
   background: var(--on-surface-variant);
   opacity: 0;
 }
-.opt:hover .radio::before { opacity: var(--state-1); }
+@media (hover: hover) { .opt:hover .radio::before { opacity: var(--state-1); } }
 .opt:active .radio::before { opacity: var(--state-2); }
 .opt[aria-checked="true"] .radio { background: var(--surface); border-color: var(--primary); }
 .opt[aria-checked="true"] .radio::before { background: var(--primary); }
@@ -574,7 +576,7 @@ a { color: inherit; }
   background: var(--surface);
   color: var(--on-surface);
 }
-.btn-close-lg:hover { background: var(--surface-variant); }
+@media (hover: hover) { .btn-close-lg:hover { background: var(--surface-variant); } }
 
 /* Mobile menu */
 .overlay--bottom { justify-content: flex-end; gap: 12px; padding: 16px; }
@@ -606,7 +608,10 @@ a { color: inherit; }
   .results__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .cap__img { padding: 16px; }
   .cap__info, .cap--loading .cap__info { position: static; transform: none; margin-top: auto; }
-  .cap:hover .cap__img img, .cap:focus-visible .cap__img img { transform: none; }
+  .cap .cap__img img,
+  .cap:hover .cap__img img,
+  .cap:focus-visible .cap__img img,
+  .cap:active .cap__img img { transform: none; }
   .cap:active { background: var(--surface-variant); }
 
   .footer__inner { align-items: flex-start; }
