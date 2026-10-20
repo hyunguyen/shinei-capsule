@@ -600,15 +600,12 @@ a { color: inherit; }
   .hero__inner { flex-direction: column; align-items: stretch; }
   .hero__title { font-size: 72px; line-height: 90px; }
 
-  .results { border: 0; border-radius: 0; overflow: visible; }
-  .results__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 0; }
-  .cap { border: 1px solid var(--outline-variant); }
-  .cap::after { content: none; }
+  /* Same single bordered frame with shared dividers as desktop, just fewer columns. */
+  .results__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .cap__img { padding: 16px; }
   .cap__info, .cap--loading .cap__info { position: static; transform: none; margin-top: auto; }
   .cap:hover .cap__img img, .cap:focus-visible .cap__img img { transform: none; }
   .cap:active { background: var(--surface-variant); }
-  .results.is-empty { border: 1px solid var(--outline-variant); border-radius: 8px; }
 
   .footer__inner { align-items: flex-start; }
   .footer__brand { flex-direction: column; align-items: flex-start; }
