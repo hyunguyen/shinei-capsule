@@ -1,0 +1,13 @@
+<svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- "Multiple countries": layered flag stripes in the site's primary blue, with a globe -->
+  <rect width="48" height="48" fill="#3D56B4"/>
+  <path d="M-8 48L40 0H56L8 48Z" fill="#5A6FC0"/>
+  <path d="M8 48L56 0H72L24 48Z" fill="#8A9AD3"/>
+  <path d="M24 48L72 0H88L40 48Z" fill="#B9C3E6"/>
+  <circle cx="24" cy="24" r="12" fill="#FFFFFF"/>
+  <g stroke="#3D56B4" stroke-width="2.2" stroke-linecap="round">
+    <circle cx="24" cy="24" r="8"/>
+    <ellipse cx="24" cy="24" rx="3.5" ry="8"/>
+    <path d="M16.5 24H31.5"/>
+  </g>
+</svg>

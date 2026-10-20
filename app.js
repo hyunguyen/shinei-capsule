@@ -372,6 +372,7 @@
   };
 
   function flagStyle(country) {
+    if (/^multiple countries$/i.test(country)) return 'background-image:url("assets/flag-multiple.svg")';
     const code = state.countryCodes[country];
     return code ? `background-image:url("https://flagcdn.com/w80/${code.toLowerCase()}.png")` : null;
   }
