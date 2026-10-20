@@ -71,7 +71,7 @@ a { color: inherit; }
   white-space: nowrap;
 }
 .nav-item.is-active { background: #f4f6fc; }
-/* State layer: primary at 8% on hover, 12% on press (over the active fill too). */
+/* State layer: primary at 8% on hover, 16% on press (over the active fill too). */
 .nav-item::before {
   content: "";
   position: absolute;
@@ -82,25 +82,27 @@ a { color: inherit; }
   pointer-events: none;
 }
 .nav-item:hover::before { opacity: 0.08; }
-.nav-item:active::before { opacity: var(--state-1); }
-/* ShinEi cap peeking out of the bottom-right corner: shown on hover, press and active. */
+.nav-item:active::before { opacity: 0.16; }
+/* ShinEi cap peeking out of the bottom-right corner: shown on hover, press and active.
+   Tilted up 15° at rest/hover and flips to the other side on press (Figma ±15°;
+   CSS rotates clockwise, so the signs are inverted). */
 .nav-item::after {
   content: "";
   position: absolute;
-  right: 6px;
-  bottom: -6px;
+  right: 4.5px;
+  bottom: -3px;
   width: 24px;
   height: 16px;
   background: url("assets/nav-cap.png") center / contain no-repeat;
   opacity: 0;
-  transform: translateY(4px) scale(0.6) rotate(-12deg);
-  transition: opacity 0.15s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateY(4px) scale(0.6) rotate(0deg);
+  transition: opacity 0.15s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   pointer-events: none;
 }
 .nav-item:hover::after,
-.nav-item:active::after,
 .nav-item:focus-visible::after,
-.nav-item.is-active::after { opacity: 1; transform: none; }
+.nav-item.is-active::after { opacity: 1; transform: rotate(-15deg); }
+.nav-item:active::after { opacity: 1; transform: rotate(15deg); }
 @media (prefers-reduced-motion: reduce) {
   .nav-item::after { transition: none; }
 }
