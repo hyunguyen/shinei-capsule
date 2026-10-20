@@ -278,18 +278,28 @@
   // ------------------------------------------------------------------
   // Modals
   // ------------------------------------------------------------------
+  // Overlays animate in via the .is-open class and stay rendered until the
+  // exit transition has finished; keep CLOSE_MS in sync with styles.css.
+  const CLOSE_MS = 220;
+  const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
   let lastFocus = null;
   function openModal(id) {
     lastFocus = document.activeElement;
     const m = $("#" + id);
+    clearTimeout(m._hideTimer);
     m.hidden = false;
+    void m.offsetWidth;  // commit the closed state so the transition runs
+    m.classList.add("is-open");
     document.body.classList.add("is-locked");
     const focusable = m.querySelector("[data-close], button, input");
     focusable && focusable.focus({ preventScroll: true });
   }
   function closeModal(id) {
-    $("#" + id).hidden = true;
-    if (!document.querySelector(".overlay:not([hidden])")) document.body.classList.remove("is-locked");
+    const m = $("#" + id);
+    if (!m.classList.contains("is-open")) return;
+    m.classList.remove("is-open");
+    m._hideTimer = setTimeout(() => { m.hidden = true; }, reducedMotion.matches ? 0 : CLOSE_MS);
+    if (!document.querySelector(".overlay.is-open")) document.body.classList.remove("is-locked");
     lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
   }
   document.querySelectorAll(".overlay").forEach((ov) => {
@@ -299,7 +309,7 @@
   });
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
-    const open = [...document.querySelectorAll(".overlay:not([hidden])")].pop();
+    const open = [...document.querySelectorAll(".overlay.is-open")].pop();
     if (open) closeModal(open.id);
   });
 
