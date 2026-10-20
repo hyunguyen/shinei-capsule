@@ -673,16 +673,14 @@ a { color: inherit; }
 /* =====================================================================
    Modal motion
    Closed state is the default. Adding .is-open (app.js) plays a keyframe
-   entrance with a visible double bounce; closing swaps it for .is-closing,
+   entrance with a small bounce; closing swaps it for .is-closing,
    which plays the exit before the overlay is hidden (220ms = CLOSE_MS in app.js).
    ===================================================================== */
 :root { --ease-exit: cubic-bezier(0.4, 0, 1, 1); }
 
 @keyframes modal-pop {
   0%   { opacity: 0; transform: scale(0.7); }
-  40%  { opacity: 1; transform: scale(1.06); }
-  65%  { transform: scale(0.98); }
-  85%  { transform: scale(1.01); }
+  55%  { opacity: 1; transform: scale(1.025); }
   100% { opacity: 1; transform: scale(1); }
 }
 @keyframes modal-out {
@@ -699,21 +697,19 @@ a { color: inherit; }
 }
 @keyframes sheet-up {
   0%   { transform: translateY(100%); }
-  55%  { transform: translateY(-4%); }
-  78%  { transform: translateY(1.2%); }
+  60%  { transform: translateY(-1.2%); }
   100% { transform: translateY(0); }
 }
 @keyframes menu-up {
   0%   { transform: translateY(calc(100% + 16px)); }
-  55%  { transform: translateY(-14px); }
-  78%  { transform: translateY(4px); }
+  60%  { transform: translateY(-6px); }
   100% { transform: translateY(0); }
 }
 
 .overlay { background: transparent; transition: background-color 0.3s ease; }
 .overlay.is-open { background: var(--surface-overlay); }
 
-/* Filter sheet (desktop & tablet) and cap detail (every size): scale 0.7 → 1 with a bounce, fade 0 → 100%. */
+/* Filter sheet (desktop & tablet) and cap detail (every size): scale 0.7 → 1 with a small bounce, fade 0 → 100%. */
 .sheet,
 .detail,
 #detail .btn-close-lg {
@@ -728,16 +724,16 @@ a { color: inherit; }
 #detail.is-open .btn-close-lg {
   opacity: 1;
   transform: none;
-  animation: modal-pop 0.55s ease-out both;
+  animation: modal-pop 0.4s ease-out both;
 }
-#detail.is-open .btn-close-lg { animation-delay: 0.08s; }
+#detail.is-open .btn-close-lg { animation-delay: 0.05s; }
 
 /* Navigation menu: slide up from below the screen with a bounce. */
 .menu { transform: translateY(calc(100% + 16px)); }
 #menu.is-closing .menu { animation: menu-down 0.22s var(--ease-exit) both; }
 #menu.is-open .menu {
   transform: none;
-  animation: menu-up 0.6s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+  animation: menu-up 0.42s cubic-bezier(0.2, 0.8, 0.3, 1) both;
 }
 
 @media (max-width: 767px) {
@@ -751,7 +747,7 @@ a { color: inherit; }
   #filter.is-closing .sheet { animation: sheet-down 0.22s var(--ease-exit) both; }
   #filter.is-open .sheet {
     transform: none;
-    animation: sheet-up 0.6s cubic-bezier(0.2, 0.8, 0.3, 1) both;
+    animation: sheet-up 0.42s cubic-bezier(0.2, 0.8, 0.3, 1) both;
   }
 }
 
