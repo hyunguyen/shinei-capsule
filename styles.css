@@ -125,7 +125,9 @@ a { color: inherit; }
   .nav-item::after { transition: none; }
 }
 
-/* ---------- Buttons ---------- */
+/* ---------- Buttons ----------
+   Figma strokes sit inside the frame, CSS borders add to the box: bordered
+   controls use 1px less padding than the design so their size matches. */
 .btn-icon,
 .chip-btn {
   display: inline-flex;
@@ -134,7 +136,7 @@ a { color: inherit; }
   flex: none;
   width: 44px;
   height: 44px;
-  padding: 10px;
+  padding: 9px;
   background: var(--surface);
   border: 1px solid var(--outline);
   border-radius: 12px;
@@ -148,7 +150,7 @@ a { color: inherit; }
 
 .btn-secondary {
   align-self: center;
-  padding: 10px 14px;
+  padding: 9px 13px;
   background: var(--surface);
   border: 1px solid var(--outline);
   border-radius: 12px;
@@ -241,7 +243,7 @@ a { color: inherit; }
   align-items: center;
   gap: 8px;
   height: 44px;
-  padding: 10px 12px;
+  padding: 9px 11px;
   background: var(--surface);
   border: 1px solid var(--outline);
   border-radius: 12px;
@@ -278,7 +280,7 @@ a { color: inherit; }
   align-items: center;
   gap: 2px;
   height: 44px;
-  padding: 10px;
+  padding: 9px;
   background: var(--surface-variant);
   border: 1px solid var(--on-surface);
   border-radius: 12px;
@@ -476,7 +478,7 @@ a { color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  padding: 10px;
+  padding: 9px;
   background: var(--surface);
   border: 1px solid var(--outline);
   border-radius: 12px;
@@ -562,7 +564,7 @@ a { color: inherit; }
 .detail {
   width: 100%;
   max-width: 800px;
-  max-height: calc(100% - 64px);
+  max-height: calc(100% - 56px);  /* leave room for the 12px gap + 44px close button */
   padding: 24px;
   overflow-y: auto;
   border-radius: 8px;
@@ -585,12 +587,12 @@ a { color: inherit; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   flex: none;
-  padding: 12px;
+  padding: 9px;
   border: 1px solid var(--outline);
-  border-radius: 16px;
+  border-radius: 12px;
   background: var(--surface);
   color: var(--on-surface);
 }
