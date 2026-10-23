@@ -753,6 +753,26 @@ a { color: inherit; }
   }
 }
 
+/* Cap detail opened from a cap in the grid: the card grows out of that cell
+   and shrinks back into it (offset/scale set by app.js); the close button fades. */
+@keyframes grow-from-cell {
+  0%   { opacity: 0; transform: translate(var(--from-x), var(--from-y)) scale(var(--from-s)); }
+  25%  { opacity: 1; }
+  65%  { transform: scale(1.02); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes shrink-to-cell {
+  0%   { opacity: 1; transform: none; }
+  70%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--from-x), var(--from-y)) scale(var(--from-s)); }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
+#detail.from-cell.is-open .detail { animation: grow-from-cell 0.45s cubic-bezier(0.25, 0.8, 0.35, 1) both; }
+#detail.from-cell.is-closing .detail { animation: shrink-to-cell 0.28s cubic-bezier(0.4, 0, 0.6, 1) both; }
+#detail.from-cell.is-open .btn-close-lg { animation: fade-in 0.25s ease-out 0.25s both; }
+#detail.from-cell.is-closing .btn-close-lg { animation: fade-out 0.12s ease-in both; }
+
 @media (prefers-reduced-motion: reduce) {
   .sheet, .detail, #detail .btn-close-lg, .menu,
   #filter .sheet, #filter.is-open .sheet, #menu.is-open .menu,

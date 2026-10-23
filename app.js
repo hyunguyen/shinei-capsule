@@ -225,7 +225,7 @@
 
   function capCard(cap) {
     const label = [cap.brand, cap.product, cap.country].filter(Boolean).join(", ");
-    return el("button", { class: "cap", type: "button", "aria-label": `Cap ${cap.id}: ${label}`, onclick: () => openDetail(cap) },
+    return el("button", { class: "cap", type: "button", "aria-label": `Cap ${cap.id}: ${label}`, onclick: (e) => openDetail(cap, e.currentTarget) },
       el("div", { class: "cap__img" }, capImg(cap, "")),
       tagInfo(cap));
   }
@@ -324,13 +324,15 @@
   function closeModal(id) {
     const m = $("#" + id);
     if (!m.classList.contains("is-open")) return;
+    // a modal may prepare its own exit (and duration) while its open styles still apply
+    const exitMs = m._beforeClose ? m._beforeClose() : CLOSE_MS;
     m.classList.remove("is-open");
     m.classList.add("is-closing");
     m._hideTimer = setTimeout(() => {
       m.hidden = true;
       m.classList.remove("is-closing");
       unlockScroll();  // after the exit, so the scrollbar doesn't pop back mid-animation
-    }, reducedMotion.matches ? 0 : CLOSE_MS);
+    }, reducedMotion.matches ? 0 : exitMs);
     lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
   }
   document.querySelectorAll(".overlay").forEach((ov) => {
@@ -345,7 +347,27 @@
   });
 
   // Cap detail
-  function openDetail(cap) {
+  //
+  // The card grows out of the cap's cell and shrinks back into it: a uniform
+  // scale (so the text never stretches) from the cell's centre, passed to the
+  // CSS keyframes as --from-x/--from-y/--from-s. If the cell isn't on screen,
+  // or motion is reduced, the card pops from the centre like the other modals.
+  const FROM_CELL_EXIT_MS = 280;
+  const onScreen = (r) => r.width > 0 && r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth;
+
+  // Offset and scale that put the card, centred and shrunk to fit, over the cell.
+  function setCardOrigin(card, cell) {
+    const c = cell.getBoundingClientRect();
+    if (!onScreen(c)) return false;
+    const r = card.getBoundingClientRect();  // scaling around the centre keeps the centre put
+    const scale = Math.min(c.width / card.offsetWidth, c.height / card.offsetHeight);
+    card.style.setProperty("--from-x", `${c.left + c.width / 2 - (r.left + r.width / 2)}px`);
+    card.style.setProperty("--from-y", `${c.top + c.height / 2 - (r.top + r.height / 2)}px`);
+    card.style.setProperty("--from-s", scale.toFixed(4));
+    return true;
+  }
+
+  function openDetail(cap, cell) {
     const rows = [["ID", cap.id], ["PRODUCT", cap.product], ["BRAND", cap.brand], ["COUNTRY", cap.country],
       ["TEXT", cap.text], ["VISUAL", cap.visual], ["NOTE", cap.note]];
     $("#detail-card").replaceChildren(el("div", { class: "dtable" },
@@ -358,8 +380,24 @@
           el("div", { class: "drow" },
             el("div", { class: "drow__k", text: k }),
             el("div", { class: "drow__v", text: v || "—" })))))));
+    const detail = $("#detail");
+    const card = $("#detail .detail");
+    // lay the card out (still invisible) so it can be measured before animating:
+    // stop any exit still running and lock scroll first (hiding a classic
+    // scrollbar re-centres the overlay)
+    clearTimeout(detail._hideTimer);
+    detail.classList.remove("is-closing");
+    lockScroll();
+    detail.hidden = false;
+    card.scrollTop = 0;
+    const fromCell = !!cell && !reducedMotion.matches && setCardOrigin(card, cell);
+    detail.classList.toggle("from-cell", fromCell);
+    detail._beforeClose = () => {
+      const back = detail.classList.contains("from-cell") && !reducedMotion.matches && cell.isConnected && setCardOrigin(card, cell);
+      detail.classList.toggle("from-cell", back);
+      return back ? FROM_CELL_EXIT_MS : CLOSE_MS;
+    };
     openModal("detail");
-    $("#detail .detail").scrollTop = 0;
   }
 
   // ------------------------------------------------------------------
