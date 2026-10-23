@@ -710,6 +710,7 @@ a { color: inherit; }
 
 .overlay { background: transparent; transition: background-color 0.3s ease; }
 .overlay.is-open { background: var(--surface-overlay); }
+.overlay.is-closing { pointer-events: none; }  /* let clicks reach the page during the exit */
 
 /* Filter sheet (desktop & tablet) and cap detail (every size): scale 0.7 → 1 with a small bounce, fade 0 → 100%. */
 .sheet,
@@ -752,6 +753,26 @@ a { color: inherit; }
     animation: sheet-up 0.42s cubic-bezier(0.2, 0.8, 0.3, 1) both;
   }
 }
+
+/* Cap detail opened from the grid: the cap image flies in on its own (.cap-flyer,
+   driven by app.js), so the card and close button only fade around it. */
+.cap-flyer {
+  position: fixed;
+  z-index: 60;
+  object-fit: cover;
+  pointer-events: none;
+  transform-origin: center;
+  will-change: transform;
+}
+/* The source cell stays still (no hover zoom) while its image is away, so the
+   flight lands exactly on it. */
+.cap.is-source .cap__img img { visibility: hidden; transform: none !important; transition: none; }
+#detail.is-flying.is-open .detail { animation: fade-in 0.32s ease-out both; }
+#detail.is-flying.is-open .btn-close-lg { animation: fade-in 0.3s ease-out 0.14s both; }
+#detail.is-flying.is-closing .detail,
+#detail.is-flying.is-closing .btn-close-lg { animation: fade-out 0.24s ease-in both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fade-out { from { opacity: 1; } to { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   .sheet, .detail, #detail .btn-close-lg, .menu,
