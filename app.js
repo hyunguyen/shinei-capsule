@@ -3,7 +3,7 @@
 
   const CFG = window.CONFIG;
   const COL = CFG.columns;
-  const PLACEHOLDER = "assets/cap-placeholder.png?v=2";
+  const PLACEHOLDER = "assets/cap-placeholder.png";
   const LIST_LIMIT = 7;      // list filter: show all if <= 7 options
   const LIST_COLLAPSED = 5;  // ...otherwise show the first 5
   const CHIP_LIMIT = 12;     // chip filter: show the first 12
@@ -225,7 +225,7 @@
 
   function capCard(cap) {
     const label = [cap.brand, cap.product, cap.country].filter(Boolean).join(", ");
-    return el("button", { class: "cap", type: "button", "aria-label": `Cap ${cap.id}: ${label}`, onclick: (e) => openDetail(cap, e.currentTarget) },
+    return el("button", { class: "cap", type: "button", "aria-label": `Cap ${cap.id}: ${label}`, onclick: () => openDetail(cap) },
       el("div", { class: "cap__img" }, capImg(cap, "")),
       tagInfo(cap));
   }
@@ -321,21 +321,16 @@
     const focusable = m.querySelector("[data-close], button, input");
     focusable && focusable.focus({ preventScroll: true });
   }
-  // A modal can register a hook that runs as it starts closing and returns how
-  // long its exit takes (the cap detail flies its image back to the grid).
-  const closeHooks = {};
   function closeModal(id) {
     const m = $("#" + id);
     if (!m.classList.contains("is-open")) return;
-    const exitMs = closeHooks[id] ? closeHooks[id]() : CLOSE_MS;  // measure before the open styles go
     m.classList.remove("is-open");
     m.classList.add("is-closing");
     m._hideTimer = setTimeout(() => {
       m.hidden = true;
       m.classList.remove("is-closing");
-      if (m._afterClose) { m._afterClose(); m._afterClose = null; }
       unlockScroll();  // after the exit, so the scrollbar doesn't pop back mid-animation
-    }, reducedMotion.matches ? 0 : exitMs);
+    }, reducedMotion.matches ? 0 : CLOSE_MS);
     lastFocus && lastFocus.focus && lastFocus.focus({ preventScroll: true });
   }
   document.querySelectorAll(".overlay").forEach((ov) => {
@@ -350,66 +345,7 @@
   });
 
   // Cap detail
-  //
-  // The cap image flies between its cell in the grid and the detail card
-  // (a FLIP animation on a temporary <img> layered above the overlay) while
-  // the rest of the card fades in around it. When flying isn't possible —
-  // reduced motion, or the cell is off screen — the card pops in and out as
-  // the other modals do.
-  const FLY_IN_MS = 480;
-  const FLY_OUT_MS = 340;
-  let flight = null;  // { cell, img, anim, flyer } while a flown-in card is open
-
-  const onScreen = (r) => r.width > 0 && r.bottom > 0 && r.right > 0 && r.top < innerHeight && r.left < innerWidth;
-
-  // Place a copy of `src` over `to` and animate it from the box `from`.
-  function flyImage(src, from, to, { duration, easing, overshoot }) {
-    const flyer = el("img", { class: "cap-flyer", src, alt: "", "aria-hidden": "true" });
-    Object.assign(flyer.style, { left: `${to.left}px`, top: `${to.top}px`, width: `${to.width}px`, height: `${to.height}px` });
-    document.body.append(flyer);
-    const dx = (from.left + from.width / 2) - (to.left + to.width / 2);
-    const dy = (from.top + from.height / 2) - (to.top + to.height / 2);
-    const start = `translate(${dx}px, ${dy}px) scale(${from.width / to.width})`;
-    const frames = overshoot
-      ? [{ transform: start }, { transform: "scale(1.03)", offset: 0.72 }, { transform: "none" }]
-      : [{ transform: start }, { transform: "none" }];
-    const anim = flyer.animate(frames, { duration, easing, fill: "forwards" });
-    anim.finished.catch(() => {}).finally(() => flyer.remove());
-    return { anim, flyer };
-  }
-
-  function endFlight() {
-    if (!flight) return;
-    flight.cell.classList.remove("is-source");
-    flight = null;
-  }
-
-  closeHooks.detail = () => {
-    const detail = $("#detail");
-    const target = $("#detail .dtable__img img");
-    if (!flight) return CLOSE_MS;
-    const { cell, img } = flight;
-    if (flight.flyer) {  // closed before the fly-in landed
-      flight.anim.cancel();
-      flight.flyer.remove();
-      flight.flyer = null;
-    }
-    const from = target.getBoundingClientRect();
-    const to = img.isConnected ? img.getBoundingClientRect() : null;
-    if (!to || !onScreen(to) || !onScreen(from)) {
-      // can't see the cell or the card image: fall back to the normal pop-out
-      detail.classList.remove("is-flying");
-      endFlight();
-      return CLOSE_MS;
-    }
-    target.style.visibility = "hidden";
-    flyImage(img.currentSrc || img.src, from, to, { duration: FLY_OUT_MS, easing: "cubic-bezier(0.4, 0, 0.2, 1)" })
-      .anim.finished.catch(() => {}).finally(() => { if (!flight || flight.cell === cell) endFlight(); });
-    detail._afterClose = () => { target.style.visibility = ""; detail.classList.remove("is-flying"); };
-    return FLY_OUT_MS;
-  };
-
-  function openDetail(cap, cell) {
+  function openDetail(cap) {
     const rows = [["ID", cap.id], ["PRODUCT", cap.product], ["BRAND", cap.brand], ["COUNTRY", cap.country],
       ["TEXT", cap.text], ["VISUAL", cap.visual], ["NOTE", cap.note]];
     $("#detail-card").replaceChildren(el("div", { class: "dtable" },
@@ -422,28 +358,8 @@
           el("div", { class: "drow" },
             el("div", { class: "drow__k", text: k }),
             el("div", { class: "drow__v", text: v || "—" })))))));
-    const detail = $("#detail");
-    endFlight();
-    detail._afterClose = null;  // reopened before a previous exit finished
-    const img = cell && cell.querySelector(".cap__img img");
-    const from = img && img.getBoundingClientRect();
-    const canFly = !!img && !reducedMotion.matches && onScreen(from);
-    detail.classList.toggle("is-flying", canFly);
     openModal("detail");
     $("#detail .detail").scrollTop = 0;
-    if (!canFly) return;
-
-    // The card only fades (no transform), so the image's final box can be measured right away.
-    const target = $("#detail .dtable__img img");
-    const to = target.getBoundingClientRect();
-    target.style.visibility = "hidden";
-    cell.classList.add("is-source");
-    const { anim, flyer } = flyImage(img.currentSrc || img.src, from, to,
-      { duration: FLY_IN_MS, easing: "cubic-bezier(0.2, 0.8, 0.3, 1)", overshoot: true });
-    flight = { cell, img, anim, flyer };
-    anim.finished.then(() => {
-      if (flight && flight.flyer === flyer) { flight.flyer = null; target.style.visibility = ""; }
-    }).catch(() => {});
   }
 
   // ------------------------------------------------------------------
